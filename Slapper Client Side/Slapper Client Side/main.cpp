@@ -56,7 +56,6 @@ int main()
 	char* buffer = new char[buffer_size];
 
 	unsigned long n_bytes = 0;
-	int r = ReadFile(h_serial, buffer, buffer_size, &n_bytes, NULL);
 
 	int input = 0; //stores arduino button input here
 
@@ -68,9 +67,14 @@ int main()
 		const wchar_t *countdown = L"3 2 1 GO";
 		pVoice->Speak(countdown, SPF_IS_XML, NULL);
 		start = clock(); //starts timer
-		for (int i = 0; i < client_data.n_data; i++)
+		for (int i = 0; i < client_data.n_data;)
 		{
-			client_data.user_input[i] = input;
+			int r = ReadFile(h_serial, buffer, buffer_size, &n_bytes, NULL);
+			input = buffer[0];
+			if (input == '1' || input == '2' || input == '3')
+			{
+				client_data.user_input[i++] = input;
+			}
 		}
 		end = clock();
 		client_data.d_time = end - start;
