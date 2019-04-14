@@ -1,0 +1,10 @@
+﻿  Main.cpp
+c:\users\alexa\documents\github\hackhouston\simon\simon\tcp_server.h(132): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'Package *'
+c:\users\alexa\documents\github\hackhouston\simon\simon\server.h(46): warning C4018: '<': signed/unsigned mismatch
+c:\users\alexa\documents\github\hackhouston\simon\simon\server.h(63): warning C4018: '<': signed/unsigned mismatch
+c:\users\alexa\documents\github\hackhouston\simon\simon\server.h(80): warning C4018: '<': signed/unsigned mismatch
+c:\users\alexa\documents\github\hackhouston\simon\simon\main.cpp(15): warning C4326: return type of 'main' should be 'int' instead of 'void'
+c:\users\alexa\documents\github\hackhouston\simon\simon\main.cpp(16): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\alexa\documents\github\hackhouston\simon\simon\main.cpp(71): error C2664: 'int compare_players(Package *,Package *,Package *,int &)': cannot convert argument 4 from 'int *' to 'int &'
+c:\users\alexa\documents\github\hackhouston\simon\simon\main.cpp(73): error C2660: 'give_slap_results': function does not take 2 arguments
+  c:\users\alexa\documents\github\hackhouston\simon\simon\server.h(159): note: see declaration of 'give_slap_results'

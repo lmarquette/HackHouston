@@ -73,53 +73,62 @@ int main()
 	//Receive Data From Server
 	Client::Client_Data client_data;
 	Client::Client_Init(&client_data);
+
 	Client::Recv_Data(&client_data.connect_socket, &receive_data);
 
-
-	//play game
-	if (receive_data.result == 1)
+	bool running = true;
+	while (running)
 	{
-		const wchar_t *countdown = L"3 2 1 GO";
-		pVoice->Speak(countdown, SPF_IS_XML, NULL);
-		start = clock(); //starts timer
-		for (int i = 0; i < receive_data.n_data;)
+
+		//play game
+		if (receive_data.result == 1)
 		{
-			int r = ReadFile(h_serial, buffer, buffer_size, &n_bytes, NULL);
-			input = buffer[0];
-			if (input == '1' || input == '2' || input == '3')
+			const wchar_t *countdown = L"3 2 1 GO";
+			pVoice->Speak(countdown, SPF_IS_XML, NULL);
+			start = clock(); //starts timer
+			for (int i = 0; i < receive_data.n_data;)
 			{
-				user_input[i++] = input;
+				int r = ReadFile(h_serial, buffer, buffer_size, &n_bytes, NULL);
+				input = buffer[0];
+				if (input == '1' || input == '2' || input == '3')
+				{
+					user_input[i++] = input;
+				}
 			}
+			end = clock();
+			receive_data.d_time = end - start;
+			for (int i = 0; i < receive_data.n_data; i++)
+			{
+				receive_data.data[i] = user_input[i];
+			}
+			//send data back with send function
+			Client::Send_Data(&client_data.connect_socket, &receive_data);
+
 		}
-		end = clock();
-		receive_data.d_time = end - start;
-		for (int i = 0; i < receive_data.n_data; i++)
+
+		//Get SLAPPED
+		if (receive_data.result == 2)
 		{
-			receive_data.data[i] = user_input[i];
+			slapfest();
+			const wchar_t *slap = L"<pitch middle = '+30'>Get SLAPPED nerd";
+			const wchar_t *new_game = L"Would you like to play another game?";
+			const wchar_t *blue = L"<pitch middle = '+30'>What is wrong with you, you stupid ass, <pitch middle = '-30'>papa smurf dick sucking fuck. Who picks the blue button. <pitch middle = '+30'>Honestly";
+
+			pVoice->Speak(blue, SPF_IS_XML, NULL);
+			pVoice->Speak(slap, SPF_IS_XML, NULL);
+			pVoice->Speak(new_game, SPF_IS_XML, NULL);
+
+			if (user_input[0] == 0) receive_data.result = 1;
+			else
+			{
+				return 0;
+			}
+
 		}
-		//send data back with send function
-		Client::Send_Data(&client_data.connect_socket, &receive_data);
-
-	}
-
-	//Get SLAPPED
-	if (receive_data.result == 2)
-	{
-		slapfest();
-		const wchar_t *slap = L"<pitch middle = '+30'>Get SLAPPED nerd";
-		const wchar_t *new_game = L"Would you like to play another game?";
-		const wchar_t *blue = L"<pitch middle = '+30'>What is wrong with you, you stupid ass, <pitch middle = '-30'>papa smurf dick sucking fuck. Who picks the blue button. <pitch middle = '+30'>Honestly";
-
-		pVoice->Speak(blue, SPF_IS_XML, NULL);
-		pVoice->Speak(slap, SPF_IS_XML, NULL);
-		pVoice->Speak(new_game, SPF_IS_XML, NULL);
-
-		if (user_input[0] == 0) receive_data.result = 1;
-		else
+		if (receive_data.result == 3)
 		{
-			return 0;
-		}
 
+		}
 	}
 	//system("pause");
 	return 0;
