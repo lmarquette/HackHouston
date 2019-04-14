@@ -15,7 +15,7 @@
 #include <math.h>
 #include <time.h>
 #include <fstream>
-
+#include "Data_Package.h"
 using namespace std;
 
 
@@ -105,9 +105,9 @@ namespace Client
 
 	}
 
-	int Send_Data(SOCKET *connect_socket, char* buffer)
+	int Send_Data(SOCKET *connect_socket, Package* buffer)
 	{
-		int iResult = send(*connect_socket, buffer, sizeof(buffer), 0);
+		int iResult = send(*connect_socket, (char*)buffer, sizeof(Package), 0);
 		if (iResult == 0)
 		{
 			printf("could not send");
@@ -122,9 +122,9 @@ namespace Client
 		return 0;
 	}
 
-	int Recv_Data(SOCKET *connect_socket, char* buffer)
+	int Recv_Data(SOCKET *connect_socket, Package *buffer)
 	{
-		int iResult = recv(*connect_socket, buffer, sizeof(buffer), 0);
+		int iResult = recv(*connect_socket, (char*)buffer, sizeof(Package), 0);
 		if (iResult == 0) printf("Connection closed\n");
 		if (iResult < 0)
 		{
