@@ -1,5 +1,6 @@
 #include <iostream>
 #include <time.h>
+#include <assert.h>
 #include <sapi.h>
 enum gamestate {initializing, match_start, results};
 using namespace std;
@@ -27,15 +28,40 @@ void slapfest()
 	
 int main()
 {
-	Package client_data;
 
 	unsigned int start;
 	unsigned int end;
 
 	ISpVoice *pVoice = NULL;
-
 	initialize_tts(&pVoice);
-	//red = 1, 
+
+	Package client_data;
+	const char *port_str = "\\\\.\\COM6";
+	HANDLE h_serial = CreateFile(port_str, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+
+	DCB device;
+	assert(GetCommState(h_serial, &device));
+	device.BaudRate = 9600;
+	SetCommState(h_serial, &device);
+
+	COMMTIMEOUTS timeouts;
+	timeouts.ReadIntervalTimeout = 3;
+	timeouts.ReadTotalTimeoutMultiplier = 3;
+	timeouts.ReadTotalTimeoutConstant = 2;
+	timeouts.WriteTotalTimeoutMultiplier = 3;
+	timeouts.WriteTotalTimeoutConstant = 2;
+	SetCommTimeouts(h_serial, &timeouts);
+
+	int buffer_size = 256;
+	char* buffer = new char[buffer_size];
+
+	unsigned long n_bytes = 0;
+	int r = ReadFile(h_serial, buffer, buffer_size, &n_bytes, NULL);
+
+	int input = 0; //stores arduino button input here
+
+	printf("%d\n", input);
+
 	//play game
 	if (client_data.result == 1)
 	{
@@ -44,7 +70,7 @@ int main()
 		start = clock(); //starts timer
 		for (int i = 0; i < client_data.n_data; i++)
 		{
-			client_data.user_input[i] = 0; //replace 0 with user arduino input
+			client_data.user_input[i] = input;
 		}
 		end = clock();
 		client_data.d_time = end - start;
