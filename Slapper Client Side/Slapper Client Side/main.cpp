@@ -90,8 +90,22 @@ int main()
 			{
 				int r = ReadFile(h_serial, buffer, buffer_size, &n_bytes, NULL);
 				input = buffer[0];
-				if (input == '1' || input == '2' || input == '3')
+				if (input == '1')
 				{
+					const wchar_t *but_1 = L"<pitch middle = '+30'>You sure about that?";
+					pVoice->Speak(but_1, SVSFlagsAsync | SVSFPurgeBeforeSpeak, NULL);
+					user_input[i++] = input;
+				}
+				if (input == '2')
+				{
+					const wchar_t *but_2 = L"<pitch middle = '+30'>Interesting Choice";
+					pVoice->Speak(but_2, SVSFlagsAsync | SVSFPurgeBeforeSpeak, NULL);
+					user_input[i++] = input;
+				}
+				if (input == '3')
+				{
+					const wchar_t *but_3 = L"<pitch middle = '+30'>Oopsie Poopsie";
+					pVoice->Speak(but_3, SVSFlagsAsync | SVSFPurgeBeforeSpeak, NULL);
 					user_input[i++] = input;
 				}
 			}
@@ -112,9 +126,7 @@ int main()
 			slapfest();
 			const wchar_t *slap = L"<pitch middle = '+30'>Get SLAPPED nerd";
 			const wchar_t *new_game = L"Would you like to play another game?";
-			const wchar_t *blue = L"<pitch middle = '+30'>What is wrong with you, you stupid ass, <pitch middle = '-30'>papa smurf dick sucking fuck. Who picks the blue button. <pitch middle = '+30'>Honestly";
-
-			pVoice->Speak(blue, SPF_IS_XML, NULL);
+			
 			pVoice->Speak(slap, SPF_IS_XML, NULL);
 			pVoice->Speak(new_game, SPF_IS_XML, NULL);
 
