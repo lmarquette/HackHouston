@@ -15,6 +15,7 @@
 #include <time.h>
 #include <sapi.h>
 #include "Client.h"
+#include <Winuser.h>
 enum gamestate {initializing, match_start, results};
 using namespace std;
 
